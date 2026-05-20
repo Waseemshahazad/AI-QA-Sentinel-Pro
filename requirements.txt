@@ -1,0 +1,4 @@
+customtkinter>=5.2.0
+pure-python-adb>=0.3.0.dev0
+python-dotenv>=1.0.1
+google-genai>=0.1.1
