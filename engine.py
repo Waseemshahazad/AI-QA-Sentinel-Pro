@@ -121,6 +121,10 @@ class QAEngine:
         master_data_payload = "\n".join(QAEngine.SESSION_LOGS)
         current_date_str = datetime.now().strftime("%B %d, %Y")
 
+        # Generate a unique timestamp for the report filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        report_filename = f"QA_Audit_Report_{timestamp}.txt"
+
         prompt = f"""
         You are a Principal Mobile DevOps and Lead Automation QA Engineer.
         Produce a highly professional audit report based on the logs below.
@@ -141,8 +145,19 @@ class QAEngine:
                 model='gemini-2.5-flash',
                 contents=prompt
             )
+
+            report_text = response.text
+
+            # Save the full Gemini intelligence response into a local text file
+            with open(report_filename, "w", encoding="utf-8") as f:
+                f.write(report_text)
+
             log_callback(f"\n📋 ======= MASTER AI AUTOMATION QUALITY REPORT =======")
-            log_callback(response.text)
-            log_callback(f"====================================================\n")
+            log_callback(report_text)
+            log_callback(f"====================================================")
+
+            # Print the confirmation message with the saved filename to the GUI console
+            log_callback(f"💾 SUCCESS: Report stored securely in file: {report_filename}\n")
+
         except Exception as e:
             log_callback(f"❌ Master AI Report compilation aborted: {str(e)}")
